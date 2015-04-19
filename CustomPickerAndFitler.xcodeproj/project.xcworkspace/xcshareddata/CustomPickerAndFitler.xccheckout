@@ -6,15 +6,23 @@
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>28246C15-FE77-4F74-9AE7-F69C11782F23</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CustomPickerAndFitler</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>185492AF4B47EB595C069AA70DD6AD38866300A2</key>
+		<string>https://github.com/kevinWong-Yo/CustomPickerAndFitler.git</string>
 		<key>1a0beb16-39a9-491a-8432-0dfbb1476d54++7897</key>
 		<string>https://svn.duapp.com/appid9kgedf0yca/1/iphone/MeiJiaLove/MeiJiaLove/UIImage-Extensions</string>
 	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CustomPickerAndFitler.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>185492AF4B47EB595C069AA70DD6AD38866300A2</key>
+		<string>../..</string>
 		<key>1a0beb16-39a9-491a-8432-0dfbb1476d54++7897</key>
-		<string>UIImage-Extensions/</string>
+		<string>../..CustomPickerAndFitler/UIImage-Extensions/</string>
 	</dict>
 	<key>IDESourceControlProjectRepositoryRootDictionary</key>
 	<dict>
@@ -22,13 +30,21 @@
 		<string>https://svn.duapp.com/appid9kgedf0yca</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://svn.duapp.com/appid9kgedf0yca/1/iphone/MeiJiaLove/MeiJiaLove/UIImage-Extensions</string>
+	<string>https://github.com/kevinWong-Yo/CustomPickerAndFitler.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>1a0beb16-39a9-491a-8432-0dfbb1476d54++7897</string>
+	<string>185492AF4B47EB595C069AA70DD6AD38866300A2</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>185492AF4B47EB595C069AA70DD6AD38866300A2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CustomPickerAndFitler</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.subversion</string>

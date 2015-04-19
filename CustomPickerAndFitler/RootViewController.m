@@ -40,7 +40,7 @@
     //开始加载的图片
     iView=[[UIImageView alloc]initWithFrame:CGRectMake(50, 200, 200, 200)];
   [self.view addSubview:iView];
-    iView.image=[UIImage imageNamed:@"836_97982.jpg"];
+    iView.image=[UIImage imageNamed:@"11"];
     
 //    //下载图片
 //    NSString *urlstr = @"http://imga13.wbiao.cn/201312/04/3188_9B_73753.jpg";

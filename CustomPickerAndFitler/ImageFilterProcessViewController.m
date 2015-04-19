@@ -322,6 +322,13 @@
     [self.view addSubview:rightBtn];
     
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.388 alpha:1.000]];
+    
+    
+    UIImageView *botton = [[UIImageView alloc ] initWithFrame:CGRectMake(10, 50, 300, 400)];
+    botton.backgroundColor=[UIColor redColor];
+    [self.view addSubview:botton];
+    
+    
     rootImageView = [[UIImageView alloc ] initWithFrame:CGRectMake(10, 50, 300, 400)];
     rootImageView.image = currentImage;
     rootImageView.userInteractionEnabled=YES;
