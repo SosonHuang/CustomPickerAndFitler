@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+@class imageFilter;
+@class Draw;
+
 @protocol ImageFitlerProcessDelegate;
 @interface ImageFilterProcessViewController : UIViewController<UIGestureRecognizerDelegate,UIImagePickerControllerDelegate>
 {
@@ -17,6 +20,7 @@
 }
 @property(nonatomic,assign) id<ImageFitlerProcessDelegate> delegate;
 @property(nonatomic,retain)UIImage *currentImage;
+@property (nonatomic, retain) imageFilter *filter;
 @end
 
 @protocol ImageFitlerProcessDelegate <NSObject>

@@ -28,7 +28,9 @@ static CGContextRef CreateRGBABitmapContext (CGImageRef inImage)// 返回一个�
 	
 	bitmapData = malloc(bitmapByteCount); //分配足够容纳图片字节数的内存空间
     
-	context = CGBitmapContextCreate (bitmapData, pixelsWide, pixelsHigh, 8, bitmapBytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast);
+    //
+    context = CGBitmapContextCreate (bitmapData, pixelsWide, pixelsHigh, 8, bitmapBytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast);
+	//context = CGBitmapContextCreate (bitmapData, pixelsWide, pixelsHigh, 8, bitmapBytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast);
     //创建CoreGraphic的图形上下文，该上下文描述了bitmaData指向的内存空间需要绘制的图像的一些绘制参数
     
 	CGColorSpaceRelease( colorSpace ); 
