@@ -149,7 +149,11 @@ static void changeRGBA(int *red,int *green,int *blue,int *alpha, const float* f)
 	CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
 	CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
 	CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-	
+    // kCGRenderingIntentAbsoluteColorimetric,
+    //kCGRenderingIntentRelativeColorimetric,
+    //kCGRenderingIntentPerceptual,
+    //kCGRenderingIntentSaturation
+
 	
 	CGImageRef imageRef = CGImageCreate(w, h, bitsPerComponent, bitsPerPixel, bytesPerRow,colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);//创建要输出的图像
 	

@@ -76,6 +76,7 @@ UIScrollView *scrollerView;
         [bgImageView addGestureRecognizer:recognizer];
         [bgImageView setUserInteractionEnabled:YES];
         UIImage *bgImage = [self doneChangeImage:i imageView:nil];
+        
         bgImageView.image = bgImage;
         [scrollerView addSubview:bgImageView];
         [bgImageView release];

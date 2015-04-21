@@ -100,77 +100,11 @@
 
 
 
-
-#pragma MARK 图片移动
--(void)handlePan:(UIPanGestureRecognizer*)recognizer
-{
-    //获取图片的大小
-    CGFloat smallwidth=rootImageView.frame.size.width;
-    CGFloat smallheight=rootImageView.frame.size.height;
-    NSLog(@"%f",rootImageView.frame.origin.x);
-    NSLog(@"%f", rootImageView.frame.origin.y);
-    
-    
-    //获取底部图片的大小
-    CGFloat imageWatchwidth=userResizableView1.frame.size.width;
-    CGFloat imageWatchheight=userResizableView1.frame.size.height;
-    NSLog(@"%f",userResizableView1.frame.origin.x);
-    NSLog(@"%f", userResizableView1.frame.origin.y);
-    
-    
-    CGPoint translation = [recognizer translationInView:rootImageView];
-    
-    NSLog(@"%f", recognizer.view.center.x);
-    NSLog(@"%f", recognizer.view.center.y);
-    NSLog(@"origin %f", recognizer.view.frame.origin.y);
-    
-    //移动到右边超出范围，即到达右边不能超出
-    if(recognizer.view.frame.origin.x>(300-imageWatchwidth)){
-        [recognizer.view setCenter:CGPointMake(300-imageWatchwidth/2,recognizer.view.center.y)];
-    }
-    
-    //移动到左边超出范围
-    if(recognizer.view.frame.origin.x<10){
-        [recognizer.view setCenter:CGPointMake(imageWatchwidth/2, recognizer.view.center.y)];
-    }
-    
-    //移动到上边超出范围
-    if(recognizer.view.frame.origin.y<=0){
-        [recognizer.view setCenter:CGPointMake(recognizer.view.center.x,imageWatchheight/2)];
-    }
-    
-    //移动到下边超出范围
-    if(recognizer.view.frame.origin.y>rootImageView.frame.size.height-imageWatchheight){
-        [recognizer.view setCenter:CGPointMake(recognizer.view.center.x,rootImageView.frame.size.height-imageWatchheight/2)];
-    }
-    //
-    //    if(recognizer.view.frame.origin.y<40||recognizer.view.frame.origin.y>440){
-    //        [recognizer.view setCenter:CGPointMake(recognizer.view.center.x, 440)];
-    //    }
-    
-    recognizer.view.center = CGPointMake(recognizer.view.center.x + translation.x,
-                                         recognizer.view.center.y + translation.y);
-    
-    
-    [recognizer setTranslation:CGPointZero inView:rootImageView];
-    
-//    watchX=userResizableView1.frame.origin.x;
-//    watchY=userResizableView1.frame.origin.y;
-//    NSLog(@"%f",  recognizer.view.frame.origin.x);
-//    NSLog(@"%f",  recognizer.view.frame.origin.y);
-    
-    
-    
-    
-    
-}
-
 #pragma MARK 图片放大缩小
 -(void)scaGesture:(UIPinchGestureRecognizer *)pinchGestureRecognizer{
        UIView *view = pinchGestureRecognizer.view;
     if (pinchGestureRecognizer.state == UIGestureRecognizerStateBegan || pinchGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         view.transform = CGAffineTransformScale(view.transform, pinchGestureRecognizer.scale, pinchGestureRecognizer.scale);
-        
         pinchGestureRecognizer.scale = 1;
     }
 }
@@ -191,7 +125,6 @@
 {
     userResizableView1.borderView.hidden=NO;
     userResizableView1.resizingControl.hidden=NO;
-
 }
 
 
@@ -290,6 +223,21 @@
     return cvMat;
 }
 
+
+-(void)autoGenImage:(int)shod andBrightneess:(int)bright{
+    UIImage* image = watchView.image;
+    cv::Mat faceImage;
+    faceImage = [self cvMatFromUIImage:image];
+    cv::Mat shadow = addShadow(faceImage, shod);
+    cv::Mat final = adjustBrightneess(faceImage, shadow, bright);
+    watchView.image = [self UIImageFromCVMat:final];
+    userResizableView1.contentView = watchView;
+    [userResizableView1 setContentView:watchView];
+    [userResizableView1 setNeedsLayout];
+    
+//    [rootImageView addSubview:userResizableView1];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -339,6 +287,7 @@
     [userResizableView1 showEditingHandles];
     [rootImageView addSubview:userResizableView1];
 
+    
     
     //定义手势放大缩小
     UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(scaGesture:)];
@@ -401,7 +350,39 @@
     //给self.view添加一个手势监测；
     [bg addGestureRecognizer:bgRecognizer];
     
+    
+    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(50,500,200,20)];
+    //slider.center = CGPointMake(160.0f, 140.0f);
+    //设置值
+    //设置最小值
+    slider.minimumValue=0;
+    //设置最大值
+    slider.maximumValue=1;
+    // 回调与事件
+    [slider addTarget:self action:@selector(startDrag:) forControlEvents:UIControlEventTouchDown];
+    [slider addTarget:self action:@selector(updateThumb:) forControlEvents:UIControlEventValueChanged];
+    [slider addTarget:self action:@selector(endDrag:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+    // 添加
+    
+    [self.view addSubview:slider];
+}
 
+
+-(void)viewDidLayoutSubviews{
+   NSLog(@"viewDidLayoutSubviews");
+}
+
+-(void)startDrag:(UISlider *)slider{
+    NSLog(@"start ---%f",slider.value);
+    [self autoGenImage:slider.value andBrightneess:slider.value];
+}
+
+-(void)updateThumb:(UISlider *)slider{
+    NSLog(@"ing----%f",slider.value);
+}
+
+-(void)endDrag:(UISlider *)slider{
+    NSLog(@"end----%f",slider.value);
 }
 
 -(void)bgTapSmall:(UITapGestureRecognizer *)sender
@@ -413,7 +394,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
