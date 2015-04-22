@@ -42,7 +42,8 @@
     
 
     UIImage *filterImage;
-    
+    UISlider *brightSlider;
+    UISlider *slider;
 }
 @end
 
@@ -85,12 +86,12 @@
         userResizableView1.borderView.hidden=YES;
         userResizableView1.resizingControl.hidden=YES;
     
-        UIGraphicsBeginImageContextWithOptions(rootImageView.frame.size,NO,0.0);
+        UIGraphicsBeginImageContextWithOptions(rootImageView.frame.size,NO,2.0);
         [rootImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-
     
+
         TestViewController *test=[[TestViewController alloc]init];
         test.testImage=newImage;
         [self presentViewController:test animated:YES completion:nil];
@@ -117,7 +118,6 @@
         view.transform = CGAffineTransformRotate(view.transform, rotationGestureRecognizer.rotation);
         [rotationGestureRecognizer setRotation:0];
     }
-
 }
 
 
@@ -224,18 +224,17 @@
 }
 
 
--(void)autoGenImage:(int)shod andBrightneess:(int)bright{
+-(void)autoGenImage:(int)shod andBrightneess:(float)bright{
+    watchView.image = hello;
     UIImage* image = watchView.image;
     cv::Mat faceImage;
     faceImage = [self cvMatFromUIImage:image];
     cv::Mat shadow = addShadow(faceImage, shod);
     cv::Mat final = adjustBrightneess(faceImage, shadow, bright);
     watchView.image = [self UIImageFromCVMat:final];
-    userResizableView1.contentView = watchView;
-    [userResizableView1 setContentView:watchView];
-    [userResizableView1 setNeedsLayout];
     
-//    [rootImageView addSubview:userResizableView1];
+    [userResizableView1 setContentView:watchView];
+
 }
 
 - (void)viewDidLoad
@@ -270,12 +269,13 @@
     watchView.userInteractionEnabled=YES;
     watchView.image = hello;
     
-    
     //Load image with face
     UIImage* image = watchView.image;
     cv::Mat faceImage;
     faceImage = [self cvMatFromUIImage:image];
+    //添加阴影
     cv::Mat shadow = addShadow(faceImage, 10);
+    //添加阴影跟亮度生成图片
     cv::Mat final = adjustBrightneess(faceImage, shadow, 0.2);
     watchView.image = [self UIImageFromCVMat:final];
     
@@ -286,7 +286,6 @@
     userResizableView1.preventsPositionOutsideSuperview = NO;
     [userResizableView1 showEditingHandles];
     [rootImageView addSubview:userResizableView1];
-
     
     
     //定义手势放大缩小
@@ -350,14 +349,21 @@
     //给self.view添加一个手势监测；
     [bg addGestureRecognizer:bgRecognizer];
     
+
     
-    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(50,500,200,20)];
+//    UIButton *botton=[[UIButton alloc]initWithFrame:CGRectMake(50,500,200,20)];
+//    [botton setTitle:@"fuck" forState:UIControlStateNormal];
+//    [botton addTarget:self action:@selector(clickBtn) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:botton];
+    
+    
+    slider = [[UISlider alloc] initWithFrame:CGRectMake(50,480,200,20)];
     //slider.center = CGPointMake(160.0f, 140.0f);
     //设置值
     //设置最小值
-    slider.minimumValue=0;
+    slider.minimumValue=-30;
     //设置最大值
-    slider.maximumValue=1;
+    slider.maximumValue=30;
     // 回调与事件
     [slider addTarget:self action:@selector(startDrag:) forControlEvents:UIControlEventTouchDown];
     [slider addTarget:self action:@selector(updateThumb:) forControlEvents:UIControlEventValueChanged];
@@ -365,6 +371,27 @@
     // 添加
     
     [self.view addSubview:slider];
+    
+    
+    brightSlider = [[UISlider alloc] initWithFrame:CGRectMake(50,520,200,20)];
+    //slider.center = CGPointMake(160.0f, 140.0f);
+    //设置值
+    //设置最小值
+    brightSlider.minimumValue=0;
+    //设置最大值
+    brightSlider.maximumValue=1;
+    // 回调与事件
+    [brightSlider addTarget:self action:@selector(brightstartDrag:) forControlEvents:UIControlEventTouchDown];
+    [brightSlider addTarget:self action:@selector(brightupdateThumb:) forControlEvents:UIControlEventValueChanged];
+    [brightSlider addTarget:self action:@selector(brightendDrag:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+    // 添加
+    
+    [self.view addSubview:brightSlider];
+
+}
+
+-(void)clickBtn{
+   
 }
 
 
@@ -372,18 +399,40 @@
    NSLog(@"viewDidLayoutSubviews");
 }
 
--(void)startDrag:(UISlider *)slider{
-    NSLog(@"start ---%f",slider.value);
-    [self autoGenImage:slider.value andBrightneess:slider.value];
+-(void)startDrag:(UISlider *)shodslider{
+    NSLog(@"start ---%f",shodslider.value);
+    [self autoGenImage:shodslider.value andBrightneess:brightSlider.value];
 }
 
--(void)updateThumb:(UISlider *)slider{
-    NSLog(@"ing----%f",slider.value);
+-(void)updateThumb:(UISlider *)shodslider{
+    NSLog(@"ing----%f",shodslider.value);
 }
 
--(void)endDrag:(UISlider *)slider{
-    NSLog(@"end----%f",slider.value);
+-(void)endDrag:(UISlider *)shodslider{
+    NSLog(@"end----%.2f",shodslider.value);
+    [self autoGenImage:shodslider.value andBrightneess:brightSlider.value];
 }
+
+
+
+
+
+-(void)brightstartDrag:(UISlider *)brislider{
+    NSLog(@"start ---%f",brislider.value);
+    [self autoGenImage:slider.value andBrightneess:brislider.value];
+}
+
+-(void)brightupdateThumb:(UISlider *)brislider{
+    NSLog(@"ing----%f",brislider.value);
+}
+
+-(void)brightendDrag:(UISlider *)brislider{
+    NSLog(@"end----%.1f",brislider.value);
+     NSString *sliderStr=[NSString stringWithFormat:@"%.1f",brislider.value];
+    [self autoGenImage:slider.value andBrightneess:[sliderStr floatValue]];
+}
+
+
 
 -(void)bgTapSmall:(UITapGestureRecognizer *)sender
 {
